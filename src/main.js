@@ -14,6 +14,7 @@ import Todos from './components/Todos'
 import redditapp from './components/redditapp'
 import firebaseapp from './components/firebaseapp'
 import colorpicker from './components/colorpicker'
+import weather from './components/weather'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
@@ -29,7 +30,8 @@ const router = new VueRouter({
         {path: '/todos', component: Todos},
         {path: '/redditapp', component: redditapp},
         {path: '/firebaseapp', component: firebaseapp},
-        {path: '/colorpicker', component: colorpicker}
+        {path: '/colorpicker', component: colorpicker},
+        {path: '/weather', component: weather}
     ]
 })
 
@@ -44,7 +46,9 @@ new Vue({
                 <li><router-link to="/yes-no">Yes/No</router-link></li>
                 <li><router-link to="/todos">Todos</router-link></li>
                 <li><router-link to="/redditapp">Reddit App</router-link></li>
+                <li><router-link to="/firebaseapp">Firebase App</router-link></li>
                 <li><router-link to="/colorpicker">Color Picker App</router-link></li>
+                <li><router-link to="/weather">Weather Forecast</router-link></li>
             </ul>
             <router-view></router-view>
         </div>

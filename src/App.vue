@@ -14,11 +14,19 @@ import Todos from './components/Todos'
 import redditapp from './components/redditapp'
 import firebaseapp from './components/firebaseapp'
 import colorpicker from './components/colorpicker'
+import weather from './components/weather'
 
 export default {
   name: 'app',
   components: {
-    Test, Users, yesNo, Todos, redditapp, firebaseapp, colorpicker
+    Test,
+    Users,
+    yesNo,
+    Todos,
+    redditapp,
+    firebaseapp,
+    colorpicker,
+    weather
   }
 }
 </script>

@@ -5,10 +5,12 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="input-group">
+                        <form class="form-inline" @submit.prevent="weather">
                         <input type="text" class="form-control" placeholder="Search for..." v-model.lazy="forecast.name">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" @click="weather">Show</button>
-                        </span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" @click="weather">Get Weather</button>
+                            </span>
+                        </form>
                     </div>
                     <hr>
                     <div class="panel panel-default">
@@ -16,16 +18,19 @@
                             <h3 class="panel-title">{{ forecast.name }}, {{ forecast.country }}</h3>
                         </div>
                         <div class="panel-body">
-                            <p>
-                                {{ Math.round(forecast.temperature) }} &#0176;C
-                                <span :class="'icon-'+forecast.weather.iconId"></span>
-                            </p>
-                            <p>{{ formatDate(forecast.dt) }}</p>
-                            <p>{{ forecast.weather.main }}</p>
-                            <p>{{ forecast.weather.description }}</p>
-                            <p>{{ forecast.weather.iconId }}</p>
-                            <p>{{ forecast.sys }}</p>
+                            <h1>{{ Math.round(forecast.temperature) }}&#0176;C</h1>
+                            <h1><span :class="'icon-'+forecast.weather.iconId"></span> <small>{{ forecast.weather.main }}</small></h1>
                         </div>
+                        <ul class="list-group">
+                            <li class="list-group-item lead text-capitalize"><b>date:</b> {{ formatDate(forecast.dt) }}</li>
+                            <li class="list-group-item lead text-capitalize"><b>description:</b> {{ forecast.weather.description }}</li>
+                            <li class="list-group-item lead"><b>Pressure:</b> <i class="wi wi-barometer"></i> {{ forecast.pressure }} hPa</li>
+                            <li class="list-group-item lead"><b>Humidity:</b> <i class="wi wi-humidity"></i> {{ forecast.humidity }}%</li>
+                            <li class="list-group-item lead"><b>Wind:</b> <i class="wi wi-strong-wind"></i> {{ forecast.wind }} meter/sec, ({{ toKmHr(forecast.wind) }} km/Hr <i class="wi wi-train
+"></i>)</li>
+                            <li class="list-group-item lead"><b>Sunrise:</b> <i class="wi wi-sunrise"></i> {{ formatTime(forecast.sunrise) }}</li>
+                            <li class="list-group-item lead"><b>Sunset:</b> <i class="wi wi-sunset"></i> {{ formatTime(forecast.sunset) }}</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -45,6 +50,11 @@
                     dt: '',
                     country: '',
                     temperature: '',
+                    pressure: '',
+                    humidity: '',
+                    wind: '',
+                    sunrise: '',
+                    sunset: '',
                     weather: [
                         {
                             main: '',
@@ -68,16 +78,31 @@
                             this.forecast = response.data;
                             this.forecast.country = response.data.sys.country;
                             this.forecast.temperature = response.data.main.temp;
+                            this.forecast.pressure = response.data.main.pressure;
+                            this.forecast.humidity = response.data.main.humidity;
+                            this.forecast.wind = response.data.wind.speed;
                             this.forecast.weather.main = response.data.weather[0].main;
                             this.forecast.weather.description = response.data.weather[0].description;
                             this.forecast.weather.iconId = response.data.weather[0].icon;
+                            this.forecast.weather.iconId = response.data.weather[0].icon;
+                            this.forecast.sunrise = response.data.sys.sunrise;
+                            this.forecast.sunset = response.data.sys.sunset;
                         });
                 },
 
             formatDate: function(date) {
-                let theDate = new Date(this.forecast.dt * 1000)
-                let dateString = theDate.toGMTString()
-                return dateString
+                let theDate = new Date(date * 1000).toLocaleString()
+                return theDate
+            },
+
+            formatTime: function(time) {
+                let theTime = new Date(time * 1000).toLocaleTimeString()
+                return theTime
+            },
+
+            toKmHr: function(speed) {
+                let theSpeed = Math.round(speed * 3.6)
+                return theSpeed
             }
         }
     }
@@ -87,4 +112,34 @@
 hr {
     border-color: #ccc;
 }
+form {
+    display: table-row;
+}
+.panel-body h1 {
+    display: inline-block;
+}
+.panel-body h1 span {
+    padding-left: 10px;
+}
+[class*='icon'] {
+    font-family: 'weathericons';
+}
+.icon-01d:before {content: '\f00d'}
+.icon-02d:before {content: '\f00c'}
+.icon-03d:before {content: '\f041'}
+.icon-04d:before {content: '\f013'}
+.icon-09d:before {content: '\f019'}
+.icon-10d:before {content: '\f008'}
+.icon-11d:before {content: '\f01e'}
+.icon-13d:before {content: '\f01b'}
+.icon-50d:before {content: '\f003'}
+.icon-01n:before {content: '\f02e'}
+.icon-02n:before {content: '\f086'}
+.icon-03n:before {content: '\f041'}
+.icon-04n:before {content: '\f041'}
+.icon-09n:before {content: '\f037'}
+.icon-10n:before {content: '\f028'}
+.icon-11n:before {content: '\f03b'}
+.icon-13n:before {content: '\f02a'}
+.icon-50n:before {content: '\f04a'}
 </style>

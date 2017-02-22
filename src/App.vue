@@ -15,6 +15,7 @@ import redditapp from './components/redditapp'
 import firebaseapp from './components/firebaseapp'
 import colorpicker from './components/colorpicker'
 import weather from './components/weather'
+import monsterslayer from './components/monsterslayer'
 
 export default {
   name: 'app',
@@ -26,7 +27,8 @@ export default {
     redditapp,
     firebaseapp,
     colorpicker,
-    weather
+    weather,
+    monsterslayer
   }
 }
 </script>

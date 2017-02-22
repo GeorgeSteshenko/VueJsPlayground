@@ -2,7 +2,12 @@
     <div class="container">
         <div class="jumbotron">
             <h1>{{ title }} for {{ forecast.name }}, {{ forecast.country }}</h1>
-
+            <!-- <input type="text" v-model="filterInput">
+            <ul>
+                <li v-for="city in filterBy(cities, filterInput)">
+                    {{ city.name }}, {{ city.country }}
+                </li>
+            </ul> -->
             <div class="row">
                 <div class="col-lg-6">
                     <div class="input-group">
@@ -48,6 +53,8 @@
         data () {
             return {
                 title: 'Weather Forecast',
+                // cities: [],
+                // filterInput: '',
                 userLocation: {
                     city: '',
                     countryCode: ''
@@ -75,6 +82,7 @@
         created: function(){
             this.getUserLocation();
             this.weather();
+            // this.getCitiesList();
         },
 
         methods: {
@@ -90,6 +98,7 @@
                             console.log(err);
                         });
                 },
+
             weather: _.debounce(
                 function() {
                     let apiWeather = 'http://api.openweathermap.org/data/2.5/weather?q='
@@ -111,8 +120,22 @@
                             this.forecast.sunrise = response.data.sys.sunrise;
                             this.forecast.sunset = response.data.sys.sunset;
                         });
-                }, 200
+                }, 300
             ),
+
+            getCitiesList:
+                function() {
+                this.$http.get('http://data.okfn.org/data/core/world-cities/r/world-cities.json')
+                    .then(function(response) {
+                        this.cities = response.body;
+                    });
+            },
+
+            // filterBy(list, value) {
+            //     return list.filter(function(city){
+            //         return city.name.indexOf(value) > -1;
+            //     });
+            // },
 
             formatDate: function(date) {
                 let theDate = new Date(date * 1000).toLocaleString()

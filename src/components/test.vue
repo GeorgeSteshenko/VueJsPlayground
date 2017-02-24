@@ -17,6 +17,14 @@
         <label>Last Name:</label><input type="text" v-model="user.lastName"><br>
         <h3>{{ fullName }}</h3>
         <h2>{{ msg }}</h2>
+        <hr>
+        <input type="text" name="" value="" v-model="city" @input="getList">
+        <ul>
+            <li v-for="(city, index) in suggestions">
+                <a>{{ city }}</a>
+            </li>
+        </ul>
+        {{ suggestions }}
     </div>
 </template>
 
@@ -43,7 +51,9 @@
                     { title: 'Item One' },
                     { title: 'Item Two' },
                     { title: 'Item Three' }
-                ]
+                ],
+                city: '',
+                suggestions: []
             }
         },
 
@@ -56,13 +66,24 @@
             },
             enterHit: function() {
                 console.log('You hit Enter');
+            },
+            getList: function() {
+                if (this.city.length < 3) return;
+
+                this.$jsonp('http://autocompletecity.geobytes.com/AutoCompleteCity', { q: this.city}).then(json => {
+                        this.suggestions = json;
+                    }, json => {})
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         },
 
         computed: {
             fullName: function() {
                 return this.user.firstName + ' ' + this.user.lastName
-            }
+            },
+
         }
     }
 </script>

@@ -4,6 +4,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import VueFire from 'vuefire'
+import VueJsonp from 'vue-jsonp'
 
 import App from './App'
 
@@ -20,6 +21,7 @@ import monsterslayer from './components/monsterslayer'
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(VueFire)
+Vue.use(VueJsonp)
 
 const router = new VueRouter({
     mode: 'history',

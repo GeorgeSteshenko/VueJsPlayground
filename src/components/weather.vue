@@ -2,6 +2,7 @@
     <div class="container">
         <div class="jumbotron">
             <h1>{{ title }} for {{ forecast.name }}, {{ forecast.country }}</h1>
+            <!-- {{ cities }} -->
             <!-- <input type="text" v-model="filterInput">
             <ul>
                 <li v-for="city in filterBy(cities, filterInput)">
@@ -123,13 +124,13 @@
                 }, 300
             ),
 
-            getCitiesList:
-                function() {
-                this.$http.get('http://data.okfn.org/data/core/world-cities/r/world-cities.json')
-                    .then(function(response) {
-                        this.cities = response.body;
-                    });
-            },
+            // getCitiesList:
+            //     function() {
+            //     this.$http.get('http://data.okfn.org/data/core/world-cities/r/world-cities.json')
+            //         .then(function(response) {
+            //             this.cities = response.body;
+            //         });
+            // },
 
             // filterBy(list, value) {
             //     return list.filter(function(city){

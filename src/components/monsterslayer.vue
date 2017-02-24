@@ -50,7 +50,15 @@
                     <button type="button" class="btn btn-default btn-lg" @click="giveUp">Give Up</button>
                 </p>
             </section>
-
+            <section class="row" v-if="turns.length > 0">
+                <h2>Game Log:</h2>
+                <hr>
+                <ul class="list-group">
+                    <li v-for="turn in turns" class="list-group-item" :class="{'text-right disabled': !turn.isPlayer}">
+                        {{ turn.text }}
+                    </li>
+                </ul>
+            </section>
         </div>
     </div>
 </template>
@@ -64,7 +72,8 @@
                 title: 'Monster Slayer',
                 playerHealth: 100,
                 monsterHealth: 100,
-                gameIsRunning: false
+                gameIsRunning: false,
+                turns: []
             }
         },
 
@@ -73,39 +82,81 @@
                 this.gameIsRunning = true;
                 this.playerHealth = 100;
                 this.monsterHealth = 100;
+                this.turns = [];
             },
             attack: function() {
-                let max = 10
-                let min = 3
-                let damage = Math.max(Math.floor(Math.random() * max) + 1, min)
+                let damage = this.calcDamage(3, 10)
                 this.monsterHealth -= damage
-
-                if (this.monsterHealth <= 0) {
-                    console.log('You won!');
-                    this.gameIsRunning = false;
+                this.turns.unshift({
+                    isPlayer: true,
+                    text: 'Player hits Monster for ' + damage + 'HP'
+                });
+                if (this.checkWin()) {
                     return;
                 }
-
-                max = 12
-                min = 5
-                damage = Math.max(Math.floor(Math.random() * max) + 1, min)
-                this.playerHealth -= damage
-
-                if (this.playerHealth <= 0) {
-                    console.log('You won!');
-                    this.gameIsRunning = false;
-                    return;
-                }
+                this.monsterAttacks();
             },
             specialAttack: function() {
-
+                let damage = this.calcDamage(10, 20)
+                this.monsterHealth -= damage
+                this.turns.unshift({
+                    isPlayer: true,
+                    text: 'Player hits Monster HARD for ' + damage + 'HP'
+                });
+                if (this.checkWin()) {
+                    return;
+                }
+                this.monsterAttacks();
             },
             heal: function() {
-
+                if (this.playerHealth <= 90) {
+                    this.playerHealth += 10;
+                } else {
+                    this.playerHealth = 100;
+                }
+                this.turns.unshift({
+                    isPlayer: true,
+                    text: 'Player heals for +10HP'
+                });
+                this.monsterAttacks();
             },
             giveUp: function() {
-
+                this.gameIsRunning = false;
             },
+            monsterAttacks: function() {
+                let damage = this.calcDamage(5, 12)
+                this.playerHealth -= damage
+                this.checkWin();
+                this.turns.unshift({
+                    isPlayer: false,
+                    text: 'Monster hits Player for ' + damage + 'HP'
+                });
+            },
+            calcDamage: function(min, max) {
+                return Math.max(Math.floor(Math.random() * max) + 1, min);
+            },
+            checkWin: function() {
+                if (this.monsterHealth <= 0) {
+
+                    if (confirm('You Won! New game?')) {
+                        this.startGame()
+                    } else {
+                        this.gameIsRunning = false;
+                    }
+                    return true;
+
+                } else if (this.playerHealth <= 0) {
+
+                    if (confirm('You Lost! New game?')) {
+                        this.startGame()
+                    } else {
+                        this.gameIsRunning = false;
+                    }
+                    return true;
+
+                }
+                return false;
+            }
         }
     }
 </script>

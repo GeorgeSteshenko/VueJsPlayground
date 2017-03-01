@@ -18,12 +18,15 @@
         <h3>{{ fullName }}</h3>
         <h2>{{ msg }}</h2>
         <hr>
-        <input type="text" name="" value="" v-model="city" @input="getList">
-        <ul>
+        <input type="text" list="cities" v-model="city" @input="getList">
+        <datalist id="cities">
+            <option v-for="city in suggestions" :value="city"></option>
+        </datalist>
+        <!-- <ul>
             <li v-for="city in suggestions">
                 <a>{{ city }}</a>
             </li>
-        </ul>
+        </ul> -->
     </div>
 </template>
 
@@ -68,8 +71,8 @@
             },
 
             getList: function() {
-                if (this.city.length >= 3) {
-                    this.$jsonp('http://autocompletecity.geobytes.com/AutoCompleteCity', {template: '<geobytes CityName>, <geobytes internet>',q: this.city}).then(json => {
+                if (this.city.length > 2) {
+                    this.$jsonp('http://autocompletecity.geobytes.com/AutoCompleteCity', {template: '<geobytes city>, <geobytes internet>',q: this.city}).then(json => {
                             this.suggestions = json;
                         }, json => {})
                         .catch(err => {
